@@ -1,0 +1,58 @@
+from dotenv import load_dotenv
+
+load_dotenv()
+from mcp.server.fastmcp import FastMCP
+
+from app.services.sap_service import fetch_ticket
+from app.services.summary_service import summarize_ticket
+from app.services.parser_service import parse_document
+
+mcp = FastMCP("sap-ticket-assistant")
+
+import traceback
+
+@mcp.tool()
+async def fetch_sap_ticket(ticket_id: str):
+    try:
+        return fetch_ticket(ticket_id)
+
+    except Exception:
+        print(traceback.format_exc())
+        raise
+
+
+@mcp.tool()
+async def parse_document_tool(text: str):
+    try:
+        return await parse_document(text)
+
+    except Exception:
+        print(traceback.format_exc())
+        raise
+
+@mcp.tool()
+async def summarize_sap_ticket(ticket_id: str):
+    try:
+        ticket = fetch_ticket(ticket_id)
+        summary = await summarize_ticket(ticket)
+
+        return {
+            "ticket": ticket,
+            "summary": summary
+        }
+
+    except Exception:
+        print(traceback.format_exc())
+        raise
+if __name__ == "__main__":      
+    print("MCP SERVER STARTED")
+    mcp.run()
+    
+    from app.mcp.server import summarize_ticket
+import asyncio
+
+result = asyncio.run(
+    summarize_ticket("SAP issue")
+)
+
+print(result)

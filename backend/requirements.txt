@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+openai
+mcp
+sse-starlette
+python-dotenv
+requests
+pydantic

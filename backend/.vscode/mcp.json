@@ -1,0 +1,10 @@
+{
+  "servers": {
+    "sap-ticket-assistant": {
+      "command": "python",
+      "args": [
+        "backend/app/mcp/server.py"
+      ]
+    }
+  }
+}
